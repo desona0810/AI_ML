@@ -2,41 +2,26 @@
 # Create a list of customer names
 # Store each customer's order details (customer name, product, price, category) as tuples inside a list
 # Use a dictionary where keys are customer names and values are lists of ordered products
-customer_names = ["Ali", "Mohammed", "Susan", "Sara"]
+customer_names = ["Alice", "Bob", "Charlie", "Diana"]
 
 orders_details = [
-    ("Ali", "Laptop", 1200, "Electronics"),
-    ("Mohammed", "Smartphone", 800, "Electronics"),
-    ("Susan", "Desk Chair", 15, "Home Essentials"),
-    ("Sara", "Book", 20, "Clothing"),
-    ("Ali", "Headphones", 200, "Electronics"),
-    ("Mohammed", "Monitor", 300, "Electronics"),
-    ("Susan", "Notebook", 5, "Clothing"),
-    ("Sara", "Lamp", 45, "Home Essentials"),
-    ("Ali", "Headphones", 200, "Clothing")
+    ("Alice", "Laptop", 1200, "Electronics"),
+    ("Bob", "Smartphone", 800, "Electronics"),
+    ("Charlie", "Desk Chair", 15, "Home Essentials"),
+    ("Diana", "Book", 20, "Clothing"),
+    ("Alice", "Headphones", 200, "Electronics"),
+    ("Bob", "Monitor", 300, "Electronics"),
+    ("Charlie", "Notebook", 5, "Clothing"),
+    ("Diana", "Lamp", 45, "Home Essentials"),
+    ("Alice", "Headphones", 200, "Clothing")
 ]
 
-# Display all order details in a table format
-print("***1.1 Order Details Table:")
-print(f"{'Customer':<10} {'Product':<15} {'Price':<10} {'Category':<15}")
-for order in orders_details:
-    customer_name, product, price, category = order
-    print(f"{customer_name:<10} {product:<15} ${price:<9} {category:<15}")
-
-# Create a dictionary mapping each customer to their list of ordered products
 customer_orders = {}
 for order in orders_details:
     customer_name, product, price, category = order
     if customer_name not in customer_orders:
         customer_orders[customer_name] = []
     customer_orders[customer_name].append((product, price, category))
-
-# Display the dictionary entries as a table format.
-# print("\n\n***1.2 Customer Orders Dictionary:")
-# print(f"{'Customer':<10} {'Orders':<50}")
-# for customer, orders in customer_orders.items():
-#     print(f"{customer:<10} {orders}")   
-
 
 #2. Classify products by category
 # Use a dictionary to map each product to its respective category
@@ -47,7 +32,7 @@ for order in orders_details:
     _, product, _, category = order
     product_categories[product] = category    
 categories_names = set(product_categories.values())
-print("\n\n***2.1 Available product categories:-")
+print("Available product categories:")
 for category in categories_names:
     print(f"- {category}")
 
@@ -88,22 +73,22 @@ unique_products = set(product_categories.keys())
 
 electronics_customers = list({order[0] for order in orders_details if order[3] == "Electronics"})
 
-sorted_customers = sorted(customer_spending.items(), key=lambda x: x[1][0], reverse=True)
+sorted_customers = sorted(customer_spending.items(), key=lambda x: x[1], reverse=True)
 top_three_customers = sorted_customers[:3]
 
-print("\n\n***4.1 Total revenue per product category:")
+print("Total revenue per product category:")
 for category, revenue in category_revenue.items():
     print(f"- {category}: ${revenue}")
 
-print("\n\n***4.2 Unique products:")
+print("Unique products:")
 for product in unique_products:
     print(f"- {product}")
 
-print("\n\n***4.3 Customers who purchased electronics:")
+print("Customers who purchased electronics:")
 for customer in electronics_customers:
     print(f"- {customer}")
 
-print("\n\n***4.4 Top three highest-spending customers:")
+print("Top three highest-spending customers:")
 for customer, total in top_three_customers:
     print(f"- {customer}: ${total}")
 
@@ -111,41 +96,29 @@ for customer, total in top_three_customers:
 # Print a summary of each customer’s total spending and their classification
 # Use set operations to find customers who purchased from multiple categories
 # Identify common customers who bought both electronics and clothing
-print("\n\n***5.1 Summary of each customer’s total spending and their classification:")
-for customer, [total, classification] in customer_spending.items():
+print("Customer Spending Summary:")
+for customer, (total, classification) in customer_spending.items():
     print(f"- {customer}: ${total} ({classification})")
-customer_categories = {}
+category_customers = {}
 for order in orders_details:
     customer_name, product, price, category = order
-    if customer_name not in customer_categories:
-        customer_categories[customer_name] = set()
-    customer_categories[customer_name].add(category)
+    if category not in category_customers:
+        category_customers[category] = set()
+    category_customers[category].add(customer_name)
 multi_category_customers = {
     customer
-    for customer, categories in customer_categories.items()
-    if len(categories) > 1
+    for _, customers in category_customers.items()
+    if len(customers) > 1
 }
-print("\n\n***5.2 Customers who purchased from multiple categories:")
+print("Customers who purchased from multiple categories:")
 for customer in multi_category_customers:
     print(f"- {customer}")
 
-# electronics_buyers = category_customers.get("Electronics", set())
-electronics_buyers = {
-    customer
-    for customer, categories in customer_categories.items()
-    if "Electronics" in categories 
-}
-
-# clothing_buyers = category_customers.get("Clothing", set())
-clothing_buyers = {
-    customer
-    for customer, categories in customer_categories.items()
-    if "Clothing" in categories 
-}
-
+electronics_buyers = category_customers.get("Electronics", set())
+clothing_buyers = category_customers.get("Clothing", set())
 common_customers = electronics_buyers.intersection(clothing_buyers)
 
-print("\n\n***5.3 Customers who bought both electronics and clothing:")
+print("Customers who bought both electronics and clothing:")
 for customer in common_customers:
     print(f"- {customer}")
 
